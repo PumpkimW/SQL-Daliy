@@ -55,7 +55,7 @@ u_n	c_n	date
 fh	ios	2020-10-13
 wangchao	ios	2020-10-13
 
---解答
+--解答SQL代码如下
 select 
     u.name as un 
     ,c.name as c_n 
