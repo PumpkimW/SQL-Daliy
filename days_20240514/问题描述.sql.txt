@@ -1,0 +1,88 @@
+CREATE TABLE `follow` (
+`user_id` int(4) NOT NULL,
+`follower_id` int(4) NOT NULL,
+PRIMARY KEY (`user_id`,`follower_id`));
+
+CREATE TABLE `music_likes` (
+`user_id` int(4) NOT NULL,
+`music_id` int(4) NOT NULL,
+PRIMARY KEY (`user_id`,`music_id`));
+
+CREATE TABLE `music` (
+`id` int(4) NOT NULL,
+`music_name` varchar(32) NOT NULL,
+PRIMARY KEY (`id`));
+
+INSERT INTO follow VALUES(1,2);
+INSERT INTO follow VALUES(1,4);
+INSERT INTO follow VALUES(2,3);
+
+INSERT INTO music_likes VALUES(1,17);
+INSERT INTO music_likes VALUES(2,18);
+INSERT INTO music_likes VALUES(2,19);
+INSERT INTO music_likes VALUES(3,20);
+INSERT INTO music_likes VALUES(4,17);
+
+INSERT INTO music VALUES(17,'yueyawang');
+INSERT INTO music VALUES(18,'kong');
+INSERT INTO music VALUES(19,'MOM');
+INSERT INTO music VALUES(20,'Sold Out');
+
+
+请你编写一个SQL，查询向user_id = 1 的用户，推荐其关注的人喜欢的音乐。
+不要推荐该用户已经喜欢的音乐，并且按music的id升序排列。你返回的结果中不应当包含重复项
+
+描述
+假设云音乐数据库里面现在有几张如下简化的数据表:
+关注follow表,第一列是关注人的id,第二列是被关注人的id,这2列的id组成主键
+这张表的第一行代表着用户id为1的关注着id为2的用户
+这张表的第二行代表着用户id为1的关注着id为4的用户
+这张表的第三行代表着用户id为2的关注着id为3的用户
+
+个人的喜欢的音乐music_likes表,第一列是用户id,第二列是喜欢的音乐id,这2列的id组成主键
+
+音乐music表，第一列是音乐id，第二列是音乐name,id是主键
+
+请你编写一个SQL，查询向user_id = 1 的用户，推荐其关注的人喜欢的音乐。
+不要推荐该用户已经喜欢的音乐，并且按music的id升序排列。你返回的结果中不应当包含重复项
+上面的查询结果如下:
+
+
+这道题的难点在于distinct与order by 子句一起运行会报错,可以使用group by 子句代替distinct解决.
+
+
+select 
+    music_name
+from(
+select 
+   distinct msc.id,msc.music_name
+from (
+    select follower_id from follow where user_id = 1 
+ ) f 
+join music_likes ml 
+on f.follower_id = ml.user_id
+join music msc 
+on ml.music_id = msc.id
+left join (select music_id from music_likes where user_id = 1 ) t
+on msc.id = t.music_id
+where t.music_id is null
+) tmp 
+order by id
+;
+
+
+select 
+    max(msc.music_name) as music_name
+from (
+    select follower_id from follow where user_id = 1 
+ ) f 
+join music_likes ml 
+on f.follower_id = ml.user_id
+join music msc 
+on ml.music_id = msc.id
+left join (select music_id from music_likes where user_id = 1 ) t
+on msc.id = t.music_id
+where t.music_id is null
+group by msc.id
+order by msc.id
+;
