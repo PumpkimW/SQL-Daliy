@@ -34,7 +34,11 @@ select
     s1.date
     ,case when count(s2.user_id) = 0 then 0.000
           else
-            round(count(distinct case when new_flag = 1 then s2.user_id else null end) / count(distinct case when new_flag = 1 then s1.user_id else null end),3)
+            round(
+				count(distinct case when new_flag = 1 then s2.user_id else null end) 
+				/ 
+				count(distinct case when new_flag = 1 then s1.user_id else null end)
+			,3)
     end as p
 from(
 	select
@@ -53,23 +57,24 @@ group by s1.date
 ;
 
 
-select t0.date,
-ifnull(round(count(distinct t2.user_id)/(count(t1.user_id)),3),0)
-from
-(
-    select date
-    from login
-    group by date
+select 
+	t0.date
+	,ifnull(round(count(distinct t2.user_id)/(count(t1.user_id)),3),0) as p
+from(
+	select date
+	from login
+	group by date
 ) t0
-left join
-(
-    select user_id,min(date) as date
-    from login
-    group by user_id
+left join (
+	select 
+		user_id
+		,min(date) as date
+	from login
+	group by user_id
 )t1
-on t0.date=t1.date
-left join login as t2
-on t1.user_id=t2.user_id and datediff(t2.date,t1.date)=1
+on t0.date = t1.date
+left join login t2
+on t1.user_id = t2.user_id and datediff(t2.date,t1.date) = 1
 group by t0.date
 ;
 

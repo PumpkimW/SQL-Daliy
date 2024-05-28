@@ -32,22 +32,22 @@ d002 10003 92527
 
 
 select 
-    dept_no
-    ,emp_no
-    ,salary as maxSalary
+dept_no
+,emp_no
+,salary as maxSalary
 from(
-    select
-        dp.dept_no
-        ,sal.emp_no
-        ,sal.salary
-        ,row_number() over(partition  by dp.dept_no order by sal.salary desc) as rn
-    from (select * from dept_emp where to_date = '9999-01-01') dp
-    join (
-        select *
-        from salaries 
-        where to_date = '9999-01-01'
-    )sal
-    on dp.emp_no = sal.emp_no
+select
+	dp.dept_no
+	,sal.emp_no
+	,sal.salary
+	,row_number() over(partition  by dp.dept_no order by sal.salary desc) as rn
+from (select * from dept_emp where to_date = '9999-01-01') dp
+join (
+	select *
+	from salaries 
+	where to_date = '9999-01-01'
+)sal
+on dp.emp_no = sal.emp_no
 ) tmp 
 where rn = 1
 order by dept_no

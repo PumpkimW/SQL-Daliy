@@ -51,38 +51,38 @@ INSERT INTO music VALUES(20,'Sold Out');
 这道题的难点在于distinct与order by 子句一起运行会报错,可以使用group by 子句代替distinct解决.
 
 
-select 
-    music_name
-from(
-select 
-   distinct msc.id,msc.music_name
-from (
-    select follower_id from follow where user_id = 1 
- ) f 
-join music_likes ml 
-on f.follower_id = ml.user_id
-join music msc 
-on ml.music_id = msc.id
-left join (select music_id from music_likes where user_id = 1 ) t
-on msc.id = t.music_id
-where t.music_id is null
-) tmp 
-order by id
-;
+	select 
+		music_name
+	from(
+	select 
+	   distinct msc.id,msc.music_name
+	from (
+		select follower_id from follow where user_id = 1 
+	 ) f 
+	join music_likes ml 
+	on f.follower_id = ml.user_id
+	join music msc 
+	on ml.music_id = msc.id
+	left join (select music_id from music_likes where user_id = 1 ) t
+	on msc.id = t.music_id
+	where t.music_id is null
+	) tmp 
+	order by id
+	;
 
 
-select 
-    max(msc.music_name) as music_name
-from (
-    select follower_id from follow where user_id = 1 
- ) f 
-join music_likes ml 
-on f.follower_id = ml.user_id
-join music msc 
-on ml.music_id = msc.id
-left join (select music_id from music_likes where user_id = 1 ) t
-on msc.id = t.music_id
-where t.music_id is null
-group by msc.id
-order by msc.id
-;
+	select 
+		max(msc.music_name) as music_name
+	from ( select follower_id from follow where user_id = 1 ) f 
+	join music_likes ml 
+	on f.follower_id = ml.user_id
+	join music msc 
+	on ml.music_id = msc.id
+	left join ( select music_id from music_likes where user_id = 1 ) t
+	on msc.id = t.music_id
+	where t.music_id is null
+	group by msc.id
+	order by msc.id
+	;
+
+
