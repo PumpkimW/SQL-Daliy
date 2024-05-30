@@ -84,16 +84,17 @@ order by t.cnt desc,t.subject_id
 ;
 
 --2、方法二
+
 select
-        sj.name
-    ,count(1) as cnt
+	 sj.name
+	,count(1) as cnt
 from (
-    select 
-        *
-    from submission
-    where create_time = curdate()
+	select 
+		*
+	from submission
+	where create_time = curdate()
 ) sb 
-inner join  subject sj 
+join subject sj 
 on sb.subject_id = sj.id 
 group by sj.name,sb.subject_id
 order by cnt desc,sb.subject_id
