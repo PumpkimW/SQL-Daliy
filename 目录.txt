@@ -1,0 +1,21 @@
+1. 问题描述 
+1.1 数据描述
+
+1.2 SQL问题
+
+2. 代码解答
+2.1 建表语句
+
+2.2 代码
+2.3 解题思路
+
+（1）第1步，查询resume_info表2025年全年数据，然后根据job + '%Y-%m'（年月）对num做sum的聚合运算，结果为表t1；
+（2）第2步，查询resume_info表2026年全年数据，然后根据job + '%Y-%m'（年月）对num做sum的聚合运算，结果为表t2；
+（3）第3步，根据job+'%m'(月份)关联表t1和表t2；
+（4）第4步，从t1，t2中需选取题目要求字段，最后按照t1.first_year_mon desc,t1.job desc排序。
+
+2.4 函数介绍
+
+
+3. Github仓库链接
+https://github.com/PumpkimW/SQL-Daliy.git
