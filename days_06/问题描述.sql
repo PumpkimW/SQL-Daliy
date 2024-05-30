@@ -47,28 +47,27 @@ order by t1.first_year_mon desc,t1.job desc
 ;
 
 
-
 select 
-    t1.*
-    ,t2.second_year_mon
-    ,t2.second_year_cnt
+	t1.*
+	,t2.second_year_mon
+	,t2.second_year_cnt
 from(
-    select
-        r.job
-        ,DATE_FORMAT(date,'%Y-%m') as first_year_mon
-        ,sum(num) as first_year_cnt
-    from resume_info r
-    where date between str_to_date('2025-01-01','%Y-%m-%d') and str_to_date('2025-12-31','%Y-%m-%d')
-    group by r.job,DATE_FORMAT(date,'%Y-%m')
+	select
+		r.job
+		,DATE_FORMAT(date,'%Y-%m') as first_year_mon
+		,sum(num) as first_year_cnt
+	from resume_info r
+	where date between str_to_date('2025-01-01','%Y-%m-%d') and str_to_date('2025-12-31','%Y-%m-%d')
+	group by r.job,DATE_FORMAT(date,'%Y-%m')
 ) t1 
 left join (
-    select
-        r.job
-        ,DATE_FORMAT(date,'%Y-%m') as second_year_mon
-        ,sum(num) as second_year_cnt
-    from resume_info r
-    where date between str_to_date('2026-01-01','%Y-%m-%d') and str_to_date('2026-12-31','%Y-%-%d')
-    group by r.job,DATE_FORMAT(date,'%Y-%m')
+	select
+		r.job
+		,DATE_FORMAT(date,'%Y-%m') as second_year_mon
+		,sum(num) as second_year_cnt
+	from resume_info r
+	where date between str_to_date('2026-01-01','%Y-%m-%d') and str_to_date('2026-12-31','%Y-%-%d')
+	group by r.job,DATE_FORMAT(date,'%Y-%m')
 ) t2
 on t1.job = t2.job 
 and right(t1.first_year_mon,2) = right(t2.second_year_mon,2) 
@@ -119,7 +118,7 @@ left join (
         ,left(date,7) as second_year_mon
         ,sum(num) as second_year_cnt
     from resume_info r
-    where date between str_to_date('2026-01-01','%Y-%m-%d') and str_to_date('2026-12-31','%Y-%-%d')
+    where date between str_to_date('2026-01-01','%Y-%m-%d') and str_to_date('2026-12-31','%Y-%m-%d')
     group by r.job,left(date,7)
 ) t2
 on t1.job = t2.job 
