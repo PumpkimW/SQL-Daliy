@@ -38,15 +38,16 @@ INSERT INTO language VALUES
 请你找出每个岗位分数排名前2名的用户，得到的结果先按照language的name升序排序，再按照积分降序排序，最后按照grade的id升序排序，得到结果如下
 
 --解答
+
 select 
-    t1.id 
-    ,t2.name
-    ,t1.score
+	t1.id 
+	,t2.name
+	,t1.score
 from (
-    select 
-        g.* 
-        ,dense_rank() over(partition by language_id order by score desc) as rn
-    from grade g 
+	select 
+		g.* 
+		,dense_rank() over(partition by language_id order by score desc) as rn
+	from grade g 
 ) t1 
 left join language t2 
 on t1.language_id = t2.id 
