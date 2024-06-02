@@ -54,9 +54,10 @@ date	p
 
 
 --答案
+
 select 
-    date
-    ,round(1.0 * sum(case when e.type='no_completed' then 1 else 0 end) /count(1),3) as p
+	date
+	,round(1.0 * sum(case when e.type='no_completed' then 1 else 0 end) /count(1),3) as p
 from email e
 join (select * from user where is_blacklist=0) u 
 on e.send_id = u.id 
