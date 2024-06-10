@@ -27,14 +27,15 @@ Anneke
 
 
 --解答SQL代码如下
+
 select 
-    t.first_name
+	t.first_name
 from (
-    select 
-        e.* 
-        ,row_number() over(order by first_name ) as rn 
-        ,row_number() over(order by emp_no ) as rn1
-    from employees e 
+	select 
+		e.* 
+		,row_number() over(order by first_name ) as rn 
+		,row_number() over(order by emp_no ) as rn1
+	from employees e 
 ) t 
 where mod(rn, 2) = 1
 order by rn1

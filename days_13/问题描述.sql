@@ -52,17 +52,18 @@ sqlite不支持floor函数，支持cast(x as integer) 函数，不支持if函数
 
 --解答SQL代码如下
 --方法一
+
 select
-     t.id
-    ,t.job
-    ,t.score
-    ,t.rn as t_rank
+	 t.id
+	,t.job
+	,t.score
+	,t.rn as t_rank
 from(
-    select 
-        g.* 
-        ,count(1) over(partition by job) as cnt
-        ,row_number() over(partition by job order by score desc) as rn
-    from grade g
+	select 
+		g.* 
+		,count(1) over(partition by job) as cnt
+		,row_number() over(partition by job order by score desc) as rn
+	from grade g
 ) t 
 where (
 	case when cnt % 2 = 1
@@ -80,7 +81,10 @@ order by t.id
 --方法二妙解）
 用一条规则统一奇数个数时和偶数个数时的中位数位置。无论奇偶，中位数的位置距离（个数+1）/2 小于1，不信你随便写个试试。
 
-select id,job,score,s_rank
+select 
+	id,job
+	,score
+	,s_rank
 from (
 	select 
 	  *

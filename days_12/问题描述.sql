@@ -1,3 +1,7 @@
+--题目来源
+SQL276 牛客的课程订单分析(六)
+https://www.nowcoder.com/share/jump/5181271201717686190076
+
 --问题描述
 有很多同学在牛客购买课程来学习，购买会产生订单存到数据库里。
 
@@ -54,27 +58,33 @@ INSERT INTO client VALUES
 同一个用户下单2个以及2个以上状态为购买成功的C++课程或Java课程或Python课程的订单id，是否拼团以及客户端名字信息，
 最后一列如果是非拼团订单，则显示对应客户端名字，如果是拼团订单，则显示NULL，
 并且按照order_info的id升序排序，以上例子查询结果如下:
+输出：
+4|No|IOS
+5|Yes|None
+6|No|PC
+7|Yes|None
 
 --解答SQL代码如下
 
+
 select 
-     ord.id 
-    ,ord.is_group_buy
-    ,c.name as client_name
+	 ord.id 
+	,ord.is_group_buy
+	,case when c.id is not null 
+			then c.name 
+		else null 
+	end as client_name
 from (
-    select 
-        o.id 
-        ,o.is_group_buy
-        ,o.client_id
-        ,sum(case when product_name in ('C++','Python','Java')
-                        then 1 
-                    else 0
-                end 
-        ) over(partition by user_id) as cnt 
-    from order_info o 
-    where 1=1
-        and o.date >= '2025-10-25'
-        and o.status = 'completed'
+	select 
+		o.id 
+		,o.is_group_buy
+		,o.client_id
+		,count(1) over(partition by user_id) as cnt 
+	from order_info o 
+	where 1=1
+		and o.date >= '2025-10-15'
+		and o.status = 'completed'
+		and product_name in ('C++','Python','Java')
 ) ord
 left join client as c
 on ord.client_id = c.id

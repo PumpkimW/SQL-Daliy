@@ -1,3 +1,6 @@
+--题目来源
+SQL275 牛客的课程订单分析(五)
+https://www.nowcoder.com/share/jump/5181271201717597278805
 --问题描述
 有很多同学在牛客购买课程来学习，购买会产生订单存到数据库里。
 
@@ -52,22 +55,22 @@ id为5，7，8的订单满足以上条件，输出557336，id为5的订单为第
 
 --解答SQL代码如下
 
+select 
+	t.user_id
+	,max(case when t.rn = 1 then date else null end) as first_buy_date
+	,max(case when t.rn = 2 then date else null end) as second_buy_date
+	,count(1) as cnt
+from (
 	select 
-		t.user_id
-		,max(case when t.rn = 1 then date else null end) as first_buy_date
-		,max(case when t.rn = 2 then date else null end) as second_buy_date
-		,count(1) as cnt
-	from (
-		select 
-			o.* 
-			,row_number() over(partition by user_id order by date) as rn
-		from order_info o
-		where 1 = 1
-			and date >= '2025-10-15'
-			and status = 'completed'
-			and product_name in ('C++','Java','Python')
-	) t 
-	group by t.user_id
-	having count(1) >= 2
-	order by t.user_id
-	;
+		o.* 
+		,row_number() over(partition by user_id order by date) as rn
+	from order_info o
+	where 1 = 1
+		and date >= '2025-10-15'
+		and status = 'completed'
+		and product_name in ('C++','Java','Python')
+) t 
+group by t.user_id
+having count(1) >= 2
+order by t.user_id
+;

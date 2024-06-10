@@ -56,20 +56,21 @@ fh	ios	2020-10-13
 wangchao	ios	2020-10-13
 
 --解答SQL代码如下
+
 select 
-    u.name as un 
-    ,c.name as c_n 
-    ,log.date
+	u.name as un 
+	,c.name as c_n 
+	,log.date
 from (
-    select 
-        tmp.*
-    from (
-        select 
-            l.*
-            ,row_number() over(partition by user_id order by  date desc) as rn 
-        from login l
-    )tmp 
-    where rn = 1 
+	select 
+		tmp.*
+	from (
+		select 
+			l.*
+			,row_number() over(partition by user_id order by  date desc) as rn 
+		from login l
+	)tmp 
+	where rn = 1 
 ) log 
 left join user u 
 on log.user_id = u.id
